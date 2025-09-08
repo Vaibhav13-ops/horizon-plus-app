@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
-import axios from 'axios';
 import VisionItemCard from './VisionItemCard.jsx';
 import AddVisionItemModal from './AddVisionItemModal.jsx';
+import api from'../api.js';
 
 const ActionBoard = () => {
   const { user } = useAuth();
@@ -15,12 +15,7 @@ const ActionBoard = () => {
       if (!user) return;
       setLoading(true);
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-        const { data } = await axios.get('http://localhost:5000/api/visionboard', config);
+        const { data } = await api.get('/visionboard');
         setItems(data);
       } catch (error) {
         console.error('Failed to fetch vision board items', error);
@@ -37,12 +32,7 @@ const ActionBoard = () => {
     
     const poll = async () => {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-        const { data: updatedItem } = await axios.get(`http://localhost:5000/api/visionboard/${itemId}`, config);
+        const { data: updatedItem } = await api.get(`/visionboard/${itemId}`);
         
         if (!updatedItem.suggestionsLoading) {
           setItems(prev => 
@@ -75,15 +65,9 @@ const ActionBoard = () => {
   const handleAddItem = async (newItemData) => {
     if (!user) return;
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data: createdItem } = await axios.post('http://localhost:5000/api/visionboard', newItemData, config);
+      const { data: createdItem } = await api.post('/visionboard', newItemData);
       setItems([createdItem, ...items]);
       setIsModalOpen(false);
-
       // NEW: Start polling for AI suggestions
       console.log('Vision item added! AI suggestions are being generated...');
       pollForAISuggestions(createdItem._id);
@@ -97,12 +81,7 @@ const ActionBoard = () => {
   const handleDeleteItem = async (itemId) => {
     if (window.confirm('Are you sure you want to delete this dream?')) {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-        await axios.delete(`http://localhost:5000/api/visionboard/${itemId}`, config);
+        await api.delete(`/visionboard/${itemId}`);
         setItems(items.filter((item) => item._id !== itemId));
       } catch (error) {
         console.error('Failed to delete item', error);
@@ -113,12 +92,7 @@ const ActionBoard = () => {
 
   const handleRegenerateAI = async (itemId) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      await axios.post(`http://localhost:5000/api/visionboard/${itemId}/regenerate`, {}, config);
+      await api.post(`/visionboard/${itemId}/regenerate`, {});
       
       setItems(prev => 
         prev.map(item => 

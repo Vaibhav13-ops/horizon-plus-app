@@ -5,7 +5,7 @@ const API_URL = 'https://horizon-plus-server.onrender.com/api';
 const api = axios.create({
   baseURL: API_URL,
 });
-
+  
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
