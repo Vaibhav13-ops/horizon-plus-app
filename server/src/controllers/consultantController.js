@@ -1,4 +1,4 @@
-const ConsultantProfile = require('../models/ConsultantProfile.js');
+const ConsultantProfile = require('../models/consultantProfile.js');
 const User = require('../models/User.js');
 const Booking = require('../models/Booking.js'); 
 const Review = require('../models/Review.js'); 
