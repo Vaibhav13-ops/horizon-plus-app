@@ -1,0 +1,11 @@
+# Ignore top-level environment files
+.env
+.env.*
+
+# IDE & Editor-specific folders
+.vscode/
+.idea/
+
+# macOS & Windows system files
+.DS_Store
+Thumbs.db
