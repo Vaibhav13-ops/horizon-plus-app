@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const ConsultantProfile = require('../models/ConsultantProfile.js');
+const ConsultantProfile = require('../models/consultantProfile.js');
 const Journey = require('../models/Journey.js');
 const UserJourney = require('../models/UserJourney.js'); 
 

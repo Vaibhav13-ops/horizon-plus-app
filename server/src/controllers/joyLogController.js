@@ -1,4 +1,4 @@
-const JoyLogEntry = require('../models/JoyLogEntry.js');
+const JoyLogEntry = require('../models/joyLogEntry.js');
 const aiRecommendationService = require('../services/aiRecommendationService.js');
 
 const getJoyLogEntries = async (req, res) => {

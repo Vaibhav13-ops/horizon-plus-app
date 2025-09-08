@@ -1,6 +1,6 @@
 const Booking = require('../models/Booking.js');
 const User = require('../models/User.js');
-const ConsultantProfile = require('../models/ConsultantProfile.js');
+const ConsultantProfile = require('../models/consultantProfile.js');
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
