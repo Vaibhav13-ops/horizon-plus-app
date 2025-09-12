@@ -1,8 +1,8 @@
+// pages/PublicLandingPage.jsx
+
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import { 
   FiTarget, 
-  FiZap, 
   FiEdit, 
   FiMessageSquare, 
   FiCompass, 
@@ -10,66 +10,58 @@ import {
   FiCheckSquare,
   FiArrowRight,
   FiStar,
-  FiTrendingUp
+  FiTrendingUp,
+  FiLogIn,
+  FiUserPlus
 } from 'react-icons/fi';
 
-const FeatureCard = ({ icon, title, description, linkTo, linkText, benefits }) => {
+const FeaturePreviewCard = ({ icon, title, description, benefits }) => {
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl border border-slate-700 flex flex-col hover:border-sky-500 hover:shadow-2xl hover:shadow-sky-500/20 transition-all duration-500 transform hover:-translate-y-2 group">
+    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl border border-slate-700 flex flex-col">
       <div className="flex-shrink-0 mb-6">
-        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center text-white shadow-lg">
           {icon}
         </div>
       </div>
       
       <div className="flex-grow">
-        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-sky-400 transition-colors">
+        <h3 className="text-2xl font-bold text-white mb-4">
           {title}
         </h3>
         <p className="text-slate-400 leading-relaxed mb-6 text-lg">
           {description}
         </p>
         
-        {benefits && (
-          <div className="mb-6">
-            <h4 className="text-sm font-semibold text-sky-400 mb-3 uppercase tracking-wide">
-              What you'll get:
-            </h4>
-            <ul className="space-y-2">
-              {benefits.map((benefit, index) => (
-                <li key={index} className="flex items-center text-slate-300 text-sm">
-                  <FiStar className="w-4 h-4 text-sky-400 mr-3 flex-shrink-0" />
-                  {benefit}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <div className="mb-6">
+          <h4 className="text-sm font-semibold text-sky-400 mb-3 uppercase tracking-wide">
+            Key Features:
+          </h4>
+          <ul className="space-y-2">
+            {benefits.map((benefit, index) => (
+              <li key={index} className="flex items-center text-slate-300 text-sm">
+                <FiStar className="w-4 h-4 text-sky-400 mr-3 flex-shrink-0" />
+                {benefit}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       
       <div className="mt-8 pt-6 border-t border-slate-700">
-        <Link 
-          to={linkTo} 
-          className="inline-flex items-center justify-center w-full bg-sky-600 hover:bg-sky-500 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 group-hover:bg-sky-500 transform group-hover:scale-105"
-        >
-          <span>{linkText}</span>
-          <FiArrowRight className="ml-2 w-5 h-5" />
-        </Link>
+        <div className="text-center text-slate-500 font-semibold">
+          Sign up to access this feature
+        </div>
       </div>
     </div>
   );
 };
 
-const WelcomePage = () => {
-  const { user } = useAuth();
-
+const PublicLandingPage = () => {
   const features = [
     {
       icon: <FiTarget size={28} />,
       title: "Action Board",
-      description: "Transform your dreams into achievable milestones. Our intelligent goal-setting system helps you break down big objectives into actionable steps with AI-powered guidance.",
-      linkTo: "/action-board",
-      linkText: "Start Planning Goals",
+      description: "Transform your dreams into achievable milestones with AI-powered guidance and smart goal-setting tools.",
       benefits: [
         "AI-generated roadmaps for any goal",
         "Visual progress tracking",
@@ -80,9 +72,7 @@ const WelcomePage = () => {
     {
       icon: <FiEdit size={28} />,
       title: "Growth Compass",
-      description: "Your intelligent reflection companion. Document your journey, celebrate wins, and receive curated learning resources that match your personal growth path.",
-      linkTo: "/joy-log",
-      linkText: "Open Your Journal",
+      description: "Your intelligent reflection companion with curated learning resources that match your growth path.",
       benefits: [
         "AI-curated YouTube recommendations",
         "Private, secure journaling",
@@ -93,9 +83,7 @@ const WelcomePage = () => {
     {
       icon: <FiMessageSquare size={28} />,
       title: "AI Coach",
-      description: "Your 24/7 mindset mentor. Get personalized coaching, work through challenges, and build mental resilience with conversations tailored to your unique situation.",
-      linkTo: "/ai-coach",
-      linkText: "Start Coaching Session",
+      description: "Your 24/7 mindset mentor for personalized coaching and mental resilience building.",
       benefits: [
         "Unlimited coaching conversations",
         "Personalized mindset strategies",
@@ -106,9 +94,7 @@ const WelcomePage = () => {
     {
       icon: <FiNavigation size={28} />,
       title: "Discover Journeys",
-      description: "Join structured programs designed by industry experts. Multi-week courses that guide you through major life transitions like career changes or skill development.",
-      linkTo: "/journeys",
-      linkText: "Browse Programs",
+      description: "Join structured programs designed by industry experts for major life transitions.",
       benefits: [
         "Expert-designed curriculums",
         "Weekly structured content",
@@ -119,9 +105,7 @@ const WelcomePage = () => {
     {
       icon: <FiCheckSquare size={28} />,
       title: "My Journeys",
-      description: "Track your enrolled programs and see your learning progress. Access all your course materials, assignments, and connect with fellow participants.",
-      linkTo: "/my-journeys",
-      linkText: "View My Progress",
+      description: "Track your enrolled programs and access course materials with progress monitoring.",
       benefits: [
         "Progress tracking dashboard",
         "Assignment submissions",
@@ -132,9 +116,7 @@ const WelcomePage = () => {
     {
       icon: <FiCompass size={28} />,
       title: "Find a Consultant",
-      description: "Connect with vetted professional coaches and consultants. Browse profiles, read reviews, and book one-on-one sessions with experts in your field of interest.",
-      linkTo: "/consultants",
-      linkText: "Find Your Expert",
+      description: "Connect with vetted professional coaches and book one-on-one expert sessions.",
       benefits: [
         "Vetted professional consultants",
         "Flexible scheduling",
@@ -146,29 +128,66 @@ const WelcomePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Navigation Bar for Public Users */}
+      <header className="bg-slate-900/80 backdrop-blur-lg border-b border-slate-700 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-sky-400">Horizon+</h1>
+          <div className="flex items-center gap-4">
+            <Link 
+              to="/login" 
+              className="inline-flex items-center text-white hover:text-sky-400 transition px-4 py-2 rounded-lg border border-slate-600 hover:border-sky-500"
+            >
+              <FiLogIn className="w-4 h-4 mr-2" />
+              Login
+            </Link>
+            <Link 
+              to="/register" 
+              className="inline-flex items-center bg-sky-600 hover:bg-sky-500 text-white font-semibold px-6 py-2 rounded-lg transition transform hover:scale-105"
+            >
+              <FiUserPlus className="w-4 h-4 mr-2" />
+              Sign Up Free
+            </Link>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-sky-600/20 to-purple-600/20"></div>
-        <div className="relative max-w-7xl mx-auto px-8 py-16">
+        <div className="relative max-w-7xl mx-auto px-8 py-20">
           <div className="text-center mb-16">
             <div className="inline-flex items-center bg-sky-500/10 text-sky-400 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-sky-500/20">
               <FiTrendingUp className="w-4 h-4 mr-2" />
-              Welcome to Your Growth Journey
+              Your Growth Journey Starts Here
             </div>
             
             <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-8">
               Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">Horizon+</span>
             </h1>
             
-            <div className="text-2xl text-slate-300 mb-4">
-              Hello, <span className="text-sky-400 font-semibold">{user?.username}</span>! 👋
-            </div>
-            
-            <p className="text-xl text-slate-400 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl text-slate-400 max-w-4xl mx-auto leading-relaxed mb-12">
               Your all-in-one platform for personal and professional growth. Set ambitious goals, 
               reflect on your progress, get AI-powered coaching, and connect with expert consultants 
               — all designed to help you reach your full potential.
             </p>
+
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <Link 
+                to="/register" 
+                className="inline-flex items-center bg-sky-600 hover:bg-sky-500 text-white font-bold text-lg px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-sky-500/25"
+              >
+                <FiUserPlus className="w-5 h-5 mr-3" />
+                Start Your Journey Free
+                <FiArrowRight className="w-5 h-5 ml-3" />
+              </Link>
+              <Link 
+                to="/login" 
+                className="inline-flex items-center bg-slate-700 hover:bg-slate-600 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 border border-slate-600"
+              >
+                <FiLogIn className="w-5 h-5 mr-3" />
+                Already a Member?
+              </Link>
+            </div>
           </div>
           
           {/* Quick Stats */}
@@ -195,47 +214,45 @@ const WelcomePage = () => {
           <h2 className="text-4xl font-bold text-white mb-6">
             Everything You Need to <span className="text-sky-400">Succeed</span>
           </h2>
-          <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Explore each feature below to discover how Horizon+ can accelerate your personal and professional growth journey.
+          <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-8">
+            Discover the powerful tools waiting for you. Sign up now to unlock your full potential.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-20">
           {features.map((feature, index) => (
-            <FeatureCard
+            <FeaturePreviewCard
               key={index}
               icon={feature.icon}
               title={feature.title}
               description={feature.description}
-              linkTo={feature.linkTo}
-              linkText={feature.linkText}
               benefits={feature.benefits}
             />
           ))}
         </div>
 
-        {/* Getting Started Section */}
-        <div className="mt-20 text-center">
+        {/* Call to Action */}
+        <div className="text-center">
           <div className="bg-gradient-to-r from-sky-600/10 to-purple-600/10 rounded-3xl p-12 border border-sky-500/20">
-            <h3 className="text-3xl font-bold text-white mb-6">Ready to Begin?</h3>
+            <h3 className="text-4xl font-bold text-white mb-6">Ready to Transform Your Life?</h3>
             <p className="text-xl text-slate-300 mb-8 max-w-3xl mx-auto">
-              We recommend starting with the <strong className="text-sky-400">Action Board</strong> to set your first goal, 
-              then exploring the <strong className="text-sky-400">AI Coach</strong> to get personalized guidance on your journey.
+              Join thousands of users who are already achieving their goals with Horizon+. 
+              Your journey to personal and professional growth starts with a single click.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                to="/action-board" 
-                className="inline-flex items-center bg-sky-600 hover:bg-sky-500 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-sky-500/25"
+                to="/register" 
+                className="inline-flex items-center bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-sky-500/25"
               >
-                <FiTarget className="w-5 h-5 mr-3" />
-                Set Your First Goal
+                <FiUserPlus className="w-5 h-5 mr-3" />
+                Get Started Free
               </Link>
               <Link 
-                to="/ai-coach" 
+                to="/login" 
                 className="inline-flex items-center bg-slate-700 hover:bg-slate-600 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 border border-slate-600"
               >
-                <FiMessageSquare className="w-5 h-5 mr-3" />
-                Meet Your AI Coach
+                <FiLogIn className="w-5 h-5 mr-3" />
+                Sign In
               </Link>
             </div>
           </div>
@@ -245,4 +262,4 @@ const WelcomePage = () => {
   );
 };
 
-export default WelcomePage;
+export default PublicLandingPage;

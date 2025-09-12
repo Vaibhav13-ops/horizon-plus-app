@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     if (standardizedUser.role === 'consultant') {
       navigate('/consultant/dashboard');
     } else {
-      navigate('/'); 
+      navigate('/dashboard'); // This now goes to the protected welcome page
     }
   };
 
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     setUser(null);
-    navigate('/login');
+    navigate('/'); // This goes to the public landing page
   };
 
   const value = { user, loading, login, logout };
@@ -63,3 +63,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+

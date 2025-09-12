@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth';
 import Layout from './components/Layout.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
+import PublicLandingPage from './pages/PublicLandingPage.jsx';
 import ActionBoard from './components/ActionBoard.jsx';
 import JoyLog from './components/JoyLog.jsx';
 import AICoach from './components/AICoach.jsx';
@@ -24,38 +25,171 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">Loading...</div>;
   }
 
-  return user && allowedRoles.includes(user.role) ? children : <Navigate to="/login" />;
+  // If no user, redirect to login
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If user exists but doesn't have required role
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
+const PublicRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">Loading...</div>;
+  }
+
+  // If user is already logged in, redirect to dashboard
+  if (user) {
+    if (user.role === 'consultant') {
+      return <Navigate to="/consultant/dashboard" replace />;
+    } else {
+      return <Navigate to="/dashboard" replace />;
+    }
+  }
+
+  return children;
 };
 
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      
-      {/* Protected Routes with Layout */}
+      {/* Public Routes - Only accessible when NOT logged in */}
       <Route 
         path="/" 
+        element={
+          <PublicRoute>
+            <PublicLandingPage />
+          </PublicRoute>
+        } 
+      />
+      
+      <Route 
+        path="/login" 
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        } 
+      />
+      
+      <Route 
+        path="/register" 
+        element={
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        } 
+      />
+      
+      {/* Protected Routes - Only accessible when logged in */}
+      <Route 
+        path="/dashboard" 
         element={
           <ProtectedRoute allowedRoles={['user', 'consultant']}>
             <Layout />
           </ProtectedRoute>
         }
       >
-        {/* IMPORTANT: This is the main fix - make sure welcome is the index route */}
+        {/* This is now the authenticated user's welcome page */}
         <Route index element={<WelcomePage />} />
-        <Route path="welcome" element={<WelcomePage />} />
-        <Route path="dashboard" element={<ActionBoard />} />
-        <Route path="joy-log" element={<JoyLog />} />
-        <Route path="ai-coach" element={<AICoach />} />
-        <Route path="consultants" element={<ConsultantsPage />} />
-        <Route path="consultants/:id" element={<ConsultantDetailPage />} />
-        <Route path="booking-success" element={<BookingSuccessPage />} />
-        <Route path="journeys" element={<JourneysPage />} />
-        <Route path="journeys/:id" element={<JourneyDetailPage />} />
-        <Route path="journey-success" element={<JourneySuccessPage />} />
-        <Route path="my-journeys" element={<MyJourneysDashboard />} />
-        <Route path="my-journeys/:id" element={<EnrolledJourneyDetailPage />} />
+      </Route>
+
+      <Route 
+        path="/action-board" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<ActionBoard />} />
+      </Route>
+
+      <Route 
+        path="/joy-log" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<JoyLog />} />
+      </Route>
+
+      <Route 
+        path="/ai-coach" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AICoach />} />
+      </Route>
+
+      <Route 
+        path="/consultants" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<ConsultantsPage />} />
+        <Route path=":id" element={<ConsultantDetailPage />} />
+      </Route>
+
+      <Route 
+        path="/journeys" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<JourneysPage />} />
+        <Route path=":id" element={<JourneyDetailPage />} />
+      </Route>
+
+      <Route 
+        path="/my-journeys" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<MyJourneysDashboard />} />
+        <Route path=":id" element={<EnrolledJourneyDetailPage />} />
+      </Route>
+
+      <Route 
+        path="/booking-success" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<BookingSuccessPage />} />
+      </Route>
+
+      <Route 
+        path="/journey-success" 
+        element={
+          <ProtectedRoute allowedRoles={['user', 'consultant']}>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<JourneySuccessPage />} />
       </Route>
       
       {/* Consultant Dashboard - Separate Route */}
@@ -68,8 +202,8 @@ function App() {
         } 
       />
 
-      {/* Catch all redirect to login if not authenticated */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      {/* Catch all - redirect based on auth status */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
