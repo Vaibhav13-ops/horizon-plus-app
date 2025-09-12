@@ -1,5 +1,3 @@
-// pages/PublicLandingPage.jsx
-
 import { Link } from 'react-router-dom';
 import { 
   FiTarget, 
